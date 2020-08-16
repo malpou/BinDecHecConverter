@@ -10,7 +10,8 @@ namespace Display
                     "Klik på en tast for at gå til omregneren:\n" +
                     "B: Binær -> Decimal & Hexadecimal\n" +
                     "D: Decimal -> Binær & Hexadecimal\n" +
-                    "H: Hexadecimal -> Decimal & Binær";
+                    "H: Hexadecimal -> Decimal & Binær\n\n" +
+                    "ESC: Luk programmet";
         }
 
         public static string Insert(string numType)
@@ -19,40 +20,42 @@ namespace Display
         }
 
         // Binary
-        public static void Results(string input, Func<string, long> dec, Func<string,string> hex)
+        public static void Results(string input, Func<string, long> dec, Func<string, string> hex)
         {
-            Console.WriteLine(DecResult(dec(input).ToString(),input));
-            Console.WriteLine(HexResult(hex(input),input));
+            Console.WriteLine(DisplayResult("Decimal",(input).ToString(), input));
+            Console.WriteLine(DisplayResult("Hexadecimal", hex(input), input));
         }
 
         // Dec
-        public static void Results(long input, Func<long, string> bin, Func<long,string> hex)
+        public static void Results(long input, Func<long, string> bin, Func<long, string> hex)
         {
-            Console.WriteLine(BinResult(bin(input),input.ToString()));
-            Console.WriteLine(HexResult(hex(input),input.ToString()));
+            Console.WriteLine(DisplayResult("Binær", bin(input), input.ToString()));
+            Console.WriteLine(DisplayResult("Hexadecimal", hex(input), input.ToString()));
         }
 
         // Hex
         public static void Results(string input, Func<string, string> bin, Func<string, long> dec)
         {
-            Console.WriteLine(DecResult(dec(input).ToString(), input));
-            Console.WriteLine(BinResult(bin(input), input));
+            Console.WriteLine(DisplayResult("Decimal", dec(input).ToString(), input));
+            Console.WriteLine(DisplayResult("Binær", bin(input), input));
         }
 
-        private static string BinResult(string result, string input)
+        private static string DisplayResult(string type, string results, string input)
         {
-            return $"Binær: {input} -> {result}";
+            ResultString r;
+            r.Type = type;
+            r.Result = results;
+            r.Input = input;
+
+            return $"{r.Type}: {r.Input} -> {r.Result}";
         }
 
-        private static string DecResult(string result, string input)
+        public struct ResultString
         {
-            return $"Decimal: {input} -> {result}";
-        }
+            public string Type;
+            public string Result;
+            public string Input;
 
-        private static string HexResult(string result, string input)
-        {
-            return $"Hexadecimal: {input} -> {result}";
         }
-
     }
 }

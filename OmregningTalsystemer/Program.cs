@@ -9,31 +9,31 @@ namespace OmregningTalsystemer
     {
         static void Main(string[] args)
         {
+            bool running = true;
             do
             {
-                while (!Console.KeyAvailable)
+                Console.CursorVisible = false;
+                Console.WriteLine(Text.Meny());
+                ConsoleKeyInfo inputKey = Console.ReadKey(true);
+                switch (inputKey.Key)
                 {
-                    Console.CursorVisible = false;
-                    Console.WriteLine(Text.Meny());
-                    ConsoleKeyInfo inputKey = Console.ReadKey(true);
-                    switch (inputKey.Key)
-                    {
-                        case ConsoleKey.B:
-                            MenyPoints.Binary();
-                            break;
-                        case ConsoleKey.D:
-                            MenyPoints.Decimal();
-                            break;
-                        case ConsoleKey.H:
-                            MenyPoints.Hexadecimal();
-                            break;
-                        default:
-                            break;
-                    }
-                    Console.ReadKey(true);
-                    Console.Clear();
+                    case ConsoleKey.B:
+                        MenyPoints.Binary();
+                        break;
+                    case ConsoleKey.D:
+                        MenyPoints.Decimal();
+                        break;
+                    case ConsoleKey.H:
+                        MenyPoints.Hexadecimal();
+                        break;
+                    case ConsoleKey.Escape:
+                        running = false;
+                        break;
+                    default:
+                        break;
                 }
-            } while (Console.ReadKey(true).Key != ConsoleKey.Escape);
+                Console.Clear();
+            } while (running);
         }
     }
 
@@ -46,6 +46,7 @@ namespace OmregningTalsystemer
             string input = GetInput(Validation.Bin);
             Console.Clear();
             Text.Results(input, Bin.Dec, Bin.Hex);
+            Console.ReadKey(true);
         }
 
         public static void Decimal()
@@ -55,6 +56,7 @@ namespace OmregningTalsystemer
             long input = Convert.ToInt64(GetInput(Validation.Dec));
             Console.Clear();
             Text.Results(input, Dec.Bin, Dec.Hex);
+            Console.ReadKey();
         }
 
         public static void Hexadecimal()
@@ -64,6 +66,7 @@ namespace OmregningTalsystemer
             string input = GetInput(Validation.Hex);
             Console.Clear();
             Text.Results(input, Hex.Bin, Hex.Dec);
+            Console.ReadKey(true);
         }
 
         private static string GetInput(Func<string, bool> validate)
@@ -71,7 +74,7 @@ namespace OmregningTalsystemer
             string input;
             do
             {
-               input = Console.ReadLine();
+                input = Console.ReadLine();
             } while (!validate(input));
             return input;
         }
